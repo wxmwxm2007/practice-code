@@ -1,0 +1,97 @@
+{
+  "version": "1.0",
+  "description": "Web 访问日志异常检测规则库。改规则只改这个文件，无需改动与重新部署代码。",
+  "rules": [
+    {
+      "id": "SQLI-001",
+      "type": "path_pattern",
+      "name": "SQL 注入 - 联合查询",
+      "level": "high",
+      "pattern": "union\\s+(?:all\\s+)?select|union(?:\\s|/\\*.*?\\*/)+select"
+    },
+    {
+      "id": "SQLI-002",
+      "type": "path_pattern",
+      "name": "SQL 注入 - 恒真条件",
+      "level": "high",
+      "pattern": "(\\bor\\b|\\band\\b)\\s+['\"]?\\w+['\"]?\\s*=\\s*['\"]?\\w+"
+    },
+    {
+      "id": "SQLI-003",
+      "type": "path_pattern",
+      "name": "SQL 注入 - 时间盲注",
+      "level": "high",
+      "pattern": "sleep\\s*\\(|benchmark\\s*\\(|pg_sleep|waitfor\\s+delay"
+    },
+    {
+      "id": "SQLI-004",
+      "type": "path_pattern",
+      "name": "SQL 注入 - 数据窃取",
+      "level": "high",
+      "pattern": "information_schema|load_file|into\\s+outfile|xp_cmdshell|extractvalue|updatexml"
+    },
+    {
+      "id": "SQLI-005",
+      "type": "path_pattern",
+      "name": "SQL 注入 - 语句闭合",
+      "level": "high",
+      "pattern": "\\b(?:or|and)\\b\\s*(?:'|\")?\\s*\\(*\\s*(?:select|update|delete|insert)\\b"
+    },
+    {
+      "id": "TRAV-001",
+      "type": "path_pattern",
+      "name": "路径遍历 - 目录穿越",
+      "level": "high",
+      "pattern": "\\.\\.(/|\\\\|;)|%2e%2e%2f|%252e%252e"
+    },
+    {
+      "id": "TRAV-002",
+      "type": "path_pattern",
+      "name": "路径遍历 - 敏感文件",
+      "level": "high",
+      "pattern": "etc/passwd|etc/shadow|boot\\.ini|win\\.ini|proc/self|windows/win.ini"
+    },
+    {
+      "id": "XSS-001",
+      "type": "path_pattern",
+      "name": "跨站脚本 - XSS 特征",
+      "level": "high",
+      "pattern": "<script|%3cscript|javascript:|on(?:error|load|mouseover)\\s*="
+    },
+    {
+      "id": "CMD-001",
+      "type": "path_pattern",
+      "name": "命令注入 - 管道执行",
+      "level": "high",
+      "pattern": "(?:;|%3b|\\||%7c|&&|%26%26)\\s*(?:cat|ls|whoami|id|uname|curl|wget|nc|bash|sh|powershell)\\b"
+    },
+    {
+      "id": "SENS-001",
+      "type": "path_keyword",
+      "name": "敏感路径探测",
+      "level": "medium",
+      "pattern": ".git,.env,phpmyadmin,wp-login.php,backup.zip,phpinfo.php,.svn,.ds_store,adminer.php,config.php.bak,shell.php"
+    },
+    {
+      "id": "UA-001",
+      "type": "ua_keyword",
+      "name": "攻击工具 UA",
+      "level": "high",
+      "pattern": "sqlmap,hydra,dirsearch,nikto,nmap,masscan,acunetix,nessus,gobuster,wpscan,whatweb,zgrab"
+    },
+    {
+      "id": "UA-002",
+      "type": "ua_keyword",
+      "name": "脚本类 UA",
+      "level": "low",
+      "pattern": "python-requests,curl/,wget/,go-http-client,libwww-perl"
+    }
+  ],
+  "thresholds": {
+    "high_freq_per_minute": 300,
+    "error_rate": 0.6,
+    "error_min_requests": 50,
+    "bruteforce_fails": 30,
+    "scan_404_rate": 0.8
+  }
+}
